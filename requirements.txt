@@ -2,3 +2,4 @@ discord.py
 Flask
 PyNaCl
 yt-dlp
+static-ffmpeg
