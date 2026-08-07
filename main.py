@@ -20,7 +20,7 @@ ADMIN_USERNAME = "AuraBot"
 ADMIN_PASSWORD = "AMITRATHOD"
 
 # Direct Discord Token
-DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Ng.GnNbDP.OjIYmgvVMZbrOjw4lwnKQlYblzdk0LWwupUqf8"
+DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Ng.GJbCtV.gaFLqe0TMkI4HxyvblRmS9GMzpdwwb8ffOMh3Y"
 
 bot_settings = {
     "welcome_message": """🍃 ━━━━━━━━━━━━━━━━━━━━━━━━━━ 🍃
