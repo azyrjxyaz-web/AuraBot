@@ -234,13 +234,13 @@ YTDL_OPTIONS = {
     'format': 'bestaudio/best',
     'noplaylist': True,
     'quiet': True,
-    'default_search': 'ytsearch5',  # Yahan ytsearch ki jagah ytsearch5 kar dein taaki multiple results fetch ho sakein
+    'default_search': 'ytsearch',
     'extract_flat': False,
     'nocheckcertificate': True,
     'ignoreerrors': False,
     'no_warnings': True,
     'source_address': '0.0.0.0',
-    'extractor-args': {'youtube': {'player-client': ['android', 'web']}},
+    'extractor-args': {'youtube': {'player-client': ['ios', 'tv_embedded']}},
 }
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
