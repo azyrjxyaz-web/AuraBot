@@ -207,7 +207,10 @@ async def send_discord_message(channel_id, message):
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
-    app.run(host='0.0.0.0', port=port)
+    try:
+        app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
+    except Exception as e:
+        print(f"Flask server error: {e}")
 
 def keep_alive():
     t = Thread(target=run_flask)
@@ -383,7 +386,7 @@ async def check_balance(interaction: discord.Interaction):
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
 async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://render.com")
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://railway.app")
     
     embed = discord.Embed(
         title="🌐 AuraBot Control Panel",
@@ -434,8 +437,9 @@ async def custom_help(interaction: discord.Interaction):
 # ==================== 7. START BOT ====================
 if __name__ == "__main__":
     keep_alive()
-    DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Gimde5.Sd0kyos2HVqYGRk63nJw0rnnSjYDbdQP5ttCY"
+    DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
     if DISCORD_TOKEN:
-        bot.run(DISCORD_TOKEN)
-    else:
-        print("ERROR: Discord token is missing!")
+        try:
+            bot.run(DISCORD_TOKEN)
+        except Exception as e:
+            print(f"Bot start erro
