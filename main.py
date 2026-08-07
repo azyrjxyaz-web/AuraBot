@@ -19,23 +19,22 @@ app.secret_key = "amit_secret_key_change_this"
 ADMIN_USERNAME = "AuraBot"
 ADMIN_PASSWORD = "AMITRATHOD"
 
-# Direct Discord Token
-DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Ng.GJbCtV.gaFLqe0TMkI4HxyvblRmS9GMzpdwwb8ffOMh3Y"
-
 bot_settings = {
-    "welcome_message": """Welcome to the Forest, <@user>!
+    "welcome_message": """🍃 ━━━━━━━━━━━━━━━━━━━━━━━━━━ 🍃
+Welcome to the Forest, <@user>! 🍄
 
-Humare cozy community garden mein aapka swaagat hai!
+Humare cozy community garden mein aapka swaagat hai! ✨
 
-Rules: <#1478807408342995098>
-Main Chat: <#1478807408867414171>
-Self Roles: <#1478807408342995099>
+🌷 ┆ **Rules:** <#1478807408342995098>
+🌿 ┆ **Main Chat:** <#1478807408867414171>
+🌸 ┆ **Self Roles:** <#1478807408342995099>
 
-Chill karo, music suno aur naye dosto se milo!""",
+Chill karo, music suno aur naye dosto se milo! 🎧💖
+🍃 ━━━━━━━━━━━━━━━━━━━━━━━━🍃""",
     "welcome_image": "https://images.unsplash.com/photo-1511497584788-876761102341?q=80&w=1000&auto=format&fit=crop"
 }
 
-# ==================== WEB DASHBOARD TEMPLATES ====================
+# ==================== 1. POWERFUL ADVANCED LOGIN & DASHBOARD ====================
 LOGIN_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +56,7 @@ LOGIN_TEMPLATE = """
 </head>
 <body>
     <div class="login-card">
-        <h2>AuraBot Secure</h2>
+        <h2>🔒 AuraBot Secure</h2>
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
@@ -106,20 +105,20 @@ DASHBOARD_TEMPLATE = """
 <body>
     <div class="container">
         <div class="header">
-            <h1>AuraBot Ultimate Command Center</h1>
+            <h1>⚡ AuraBot Ultimate Command Center</h1>
             <a href="/logout" class="logout-btn">Logout</a>
         </div>
         
         <div class="grid">
             <div class="card">
-                <h3>Bot Live Status</h3>
+                <h3>🤖 Bot Live Status</h3>
                 <p class="info-text">State: <span class="status-badge">Online & Active 24/7</span></p>
                 <p class="info-text">Latency: <b>{{ bot_latency }}ms</b></p>
                 <p class="info-text">Active Voice Channels: <b>{{ active_vc_count }}</b></p>
             </div>
 
             <div class="card">
-                <h3>Voice Management</h3>
+                <h3>🔊 Voice Management</h3>
                 <p class="info-text">Connected VC: <b>{{ current_vc_name }}</b></p>
                 <form action="/disconnect-vc" method="POST" style="margin-top: 15px;">
                     <button type="submit" class="danger-btn">Force Disconnect Bot from VC</button>
@@ -128,16 +127,16 @@ DASHBOARD_TEMPLATE = """
         </div>
 
         <div class="card full">
-            <h3>Change Bot Activity / Playing Status</h3>
+            <h3>⚙️ Change Bot Activity / Playing Status</h3>
             <form action="/update-status" method="POST">
                 <label>Status Message (Activity):</label>
-                <input type="text" name="status_text" placeholder="e.g. /help | Forest Vibes" required>
+                <input type="text" name="status_text" placeholder="e.g. /help | Forest Vibes 🍄" required>
                 <button type="submit">Update Bot Status</button>
             </form>
         </div>
 
         <div class="card full">
-            <h3>Customize Forest Welcome Message & Banner</h3>
+            <h3>🌿 Customize Forest Welcome Message & Banner</h3>
             <form action="/update-welcome" method="POST">
                 <label>Welcome Text / Embed Description:</label>
                 <textarea name="welcome_msg" required>{{ current_msg }}</textarea>
@@ -148,7 +147,7 @@ DASHBOARD_TEMPLATE = """
         </div>
 
         <div class="card full">
-            <h3>Send Global Announcement / Broadcast</h3>
+            <h3>📢 Send Global Announcement / Broadcast</h3>
             <form action="/broadcast" method="POST">
                 <label>Discord Text Channel ID:</label>
                 <input type="text" name="channel_id" placeholder="Enter target channel ID..." required>
@@ -245,7 +244,7 @@ async def send_discord_message(channel_id, message):
     channel = bot.get_channel(channel_id)
     if channel:
         embed = discord.Embed(
-            title="Forest Official Announcement",
+            title="📢 Forest Official Announcement",
             description=message,
             color=discord.Color.from_rgb(46, 139, 87)
         )
@@ -284,6 +283,7 @@ YTDL_OPTIONS = {
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
+# Database Dictionaries for Economy & Cooldowns
 user_balances = {}
 daily_cooldowns = {}
 
@@ -295,8 +295,9 @@ async def on_ready():
         print(f"Synced {len(synced)} slash commands.")
     except Exception as e:
         print(f"Sync error: {e}")
-    await bot.change_presence(activity=discord.Game(name="/help | Forest Vibes"))
+    await bot.change_presence(activity=discord.Game(name="/help | Forest Vibes 🍄"))
 
+# ==================== 3. FOREST WELCOME EVENT ====================
 @bot.event
 async def on_member_join(member):
     WELCOME_CHANNEL_ID = 1478807408342995096
@@ -322,41 +323,23 @@ async def on_member_join(member):
         
         await target_channel.send(embed=embed)
 
-# ==================== DISCORD SLASH COMMANDS ====================
-
-@bot.tree.command(name="help", description="Show all available AuraBot commands")
-async def help_command(interaction: discord.Interaction):
-    embed = discord.Embed(
-        title="AuraBot Command Center - Help",
-        description="Yahan saari available commands ki list di gayi hai:",
-        color=discord.Color.from_rgb(46, 139, 87)
-    )
-    embed.add_field(name="Music Commands", value="`/join`, `/play`, `/pause`, `/resume`, `/skip`, `/stop`, `/leave`, `/vc247`", inline=False)
-    embed.add_field(name="Economy Commands", value="`/daily`, `/balance`", inline=False)
-    embed.add_field(name="Utility Commands", value="`/dashboard`, `/ping`", inline=False)
-    embed.set_footer(text="AuraBot • Powered by Amit Rathod")
-    await interaction.response.send_message(embed=embed)
-
-@bot.tree.command(name="ping", description="Check bot latency and response time")
-async def ping_command(interaction: discord.Interaction):
-    latency = round(bot.latency * 1000)
-    await interaction.response.send_message(f"Pong! Bot Latency is **{latency}ms**.")
+# ==================== 4. SLASH COMMANDS (MUSIC & VC) ====================
 
 @bot.tree.command(name="join", description="Join your current voice channel")
 async def join_vc(interaction: discord.Interaction):
     if not interaction.user.voice:
-        return await interaction.response.send_message("Pehle kisi Voice Channel me join karein!", ephemeral=True)
+        return await interaction.response.send_message("❌ Pehle kisi Voice Channel me join karein!", ephemeral=True)
     channel = interaction.user.voice.channel
     if interaction.guild.voice_client:
         await interaction.guild.voice_client.move_to(channel)
     else:
         await channel.connect(reconnect=True, timeout=30.0)
-    await interaction.response.send_message(f"Joined **{channel.name}**!")
+    await interaction.response.send_message(f"🔊 Joined **{channel.name}**!")
 
 @bot.tree.command(name="play", description="Play music from YouTube or SoundCloud")
 async def play_music(interaction: discord.Interaction, search: str):
     if not interaction.user.voice:
-        return await interaction.response.send_message("Pehle kisi Voice Channel me join karein!", ephemeral=True)
+        return await interaction.response.send_message("❌ Pehle kisi Voice Channel me join karein!", ephemeral=True)
 
     await interaction.response.defer()
 
@@ -380,74 +363,89 @@ async def play_music(interaction: discord.Interaction, search: str):
 
         source = await discord.FFmpegOpusAudio.from_probe(url, **FFMPEG_OPTIONS)
         vc.play(source)
-        await interaction.followup.send(f"**Now Playing:** {title}")
+        await interaction.followup.send(f"🎵 **Now Playing:** {title}")
     except Exception as e:
-        await interaction.followup.send(f"Play error: `{e}`")
+        await interaction.followup.send(f"❌ Play error: `{e}`")
 
 @bot.tree.command(name="pause", description="Pause the currently playing music")
 async def pause_music(interaction: discord.Interaction):
     if interaction.guild.voice_client and interaction.guild.voice_client.is_playing():
         interaction.guild.voice_client.pause()
-        await interaction.response.send_message("Music paused.")
+        await interaction.response.send_message("⏸️ Music paused.")
     else:
-        await interaction.response.send_message("Koi music play nahi ho raha hai!", ephemeral=True)
+        await interaction.response.send_message("❌ Koi music play nahi ho raha hai!", ephemeral=True)
 
 @bot.tree.command(name="resume", description="Resume paused music")
 async def resume_music(interaction: discord.Interaction):
     if interaction.guild.voice_client and interaction.guild.voice_client.is_paused():
         interaction.guild.voice_client.resume()
-        await interaction.response.send_message("Music resumed.")
+        await interaction.response.send_message("▶️ Music resumed.")
     else:
-        await interaction.response.send_message("Music paused nahi hai!", ephemeral=True)
+        await interaction.response.send_message("❌ Music paused nahi hai!", ephemeral=True)
 
 @bot.tree.command(name="skip", description="Skip the current song")
 async def skip_music(interaction: discord.Interaction):
     if interaction.guild.voice_client and (interaction.guild.voice_client.is_playing() or interaction.guild.voice_client.is_paused()):
         interaction.guild.voice_client.stop()
-        await interaction.response.send_message("Song skipped.")
+        await interaction.response.send_message("⏭️ Song skipped.")
     else:
-        await interaction.response.send_message("Skip karne ke liye kuch play nahi ho raha!", ephemeral=True)
+        await interaction.response.send_message("❌ Skip karne ke liye kuch play nahi ho raha!", ephemeral=True)
 
 @bot.tree.command(name="stop", description="Stop music playback")
 async def stop_music(interaction: discord.Interaction):
     if interaction.guild.voice_client:
         interaction.guild.voice_client.stop()
-        await interaction.response.send_message("Music stopped.")
+        await interaction.response.send_message("⏹️ Music stopped.")
     else:
-        await interaction.response.send_message("Bot kisi voice channel me nahi hai!", ephemeral=True)
+        await interaction.response.send_message("❌ Bot kisi voice channel me nahi hai!", ephemeral=True)
 
 @bot.tree.command(name="leave", description="Disconnect bot from the voice channel")
 async def leave_vc(interaction: discord.Interaction):
     if interaction.guild.voice_client:
         await interaction.guild.voice_client.disconnect()
-        await interaction.response.send_message("Disconnected from Voice Channel.")
+        await interaction.response.send_message("👋 Disconnected from Voice Channel.")
     else:
-        await interaction.response.send_message("Bot kisi voice channel me nahi hai!", ephemeral=True)
+        await interaction.response.send_message("❌ Bot kisi voice channel me nahi hai!", ephemeral=True)
 
 @bot.tree.command(name="vc247", description="Activate 24/7 Voice Channel lock")
 async def vc247_toggle(interaction: discord.Interaction):
     if not interaction.user.voice:
-        return await interaction.response.send_message("Pehle kisi Voice Channel me join karein!", ephemeral=True)
+        return await interaction.response.send_message("❌ Pehle kisi Voice Channel me join karein!", ephemeral=True)
     if not interaction.guild.voice_client:
         await interaction.user.voice.channel.connect(reconnect=True, timeout=30.0)
-    await interaction.response.send_message("**24/7 VC Lock Activated!** Bot channel nahi chhodega.")
+    await interaction.response.send_message("🔒 **24/7 VC Lock Activated!** Bot channel nahi chhodega.")
+
+# ==================== 5. SLASH COMMANDS (ECONOMY & DASHBOARD) ====================
 
 @bot.tree.command(name="daily", description="Claim your daily 24-hour coin reward")
 async def daily_reward(interaction: discord.Interaction):
     uid = interaction.user.id
     current_time = time.time()
-    cooldown_period = 86400
+    cooldown_period = 86400  # 24 hours in seconds
 
     if uid in daily_cooldowns:
         elapsed_time = current_time - daily_cooldowns[uid]
         if elapsed_time < cooldown_period:
-            return await interaction.response.send_message("Aapne aaj ka daily reward pehle hi claim kar liya hai!", ephemeral=True)
+            remaining_time = cooldown_period - elapsed_time
+            hours = int(remaining_time // 3600)
+            minutes = int((remaining_time % 3600) // 60)
+            return await interaction.response.send_message(
+                f"⏳ Aapne aaj ka daily reward pehle hi claim kar liya hai! Agla reward aap **{hours} ghante aur {minutes} minat** baad claim kar payenge.", 
+                ephemeral=True
+            )
 
     daily_cooldowns[uid] = current_time
     reward = 500
     user_balances[uid] = user_balances.get(uid, 0) + reward
     
-    await interaction.response.send_message(f"+{reward} Coins added! Aapka naya balance: **{user_balances[uid]} Coins**.")
+    await interaction.response.send_message(f"💰 **+{reward} Coins added!** Aapka naya balance: **{user_balances[uid]} Coins**.")
 
 @bot.tree.command(name="balance", description="Check your coin balance")
-async def check_balance(i
+async def check_balance(interaction: discord.Interaction):
+    uid = interaction.user.id
+    bal = user_balances.get(uid, 0)
+    await interaction.response.send_message(f"💳 **{interaction.user.display_name}**, Aapka Balance: **{bal} Coins**.")
+
+@bot.tree.command(name="dashboard", description="Get the web control panel link")
+async def dashboard_link(interaction: discord.Interaction):
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onre
