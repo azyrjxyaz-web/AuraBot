@@ -13,7 +13,7 @@ static_ffmpeg.add_paths()
 
 # ==================== SECURITY & SETTINGS ====================
 app = Flask('')
-app.secret_key = "amit_secret_key_change_this"
+app.secret_key = "amit_super_secret_key_ultimate_bot"
 
 ADMIN_USERNAME = "AMIT"
 ADMIN_PASSWORD = "AMIT"
@@ -33,37 +33,38 @@ Chill karo, music suno aur naye dosto se milo! 🎧💖
     "welcome_image": "https://images.unsplash.com/photo-1511497584788-876761102341?q=80&w=1000&auto=format&fit=crop"
 }
 
-# ==================== 1. LOGIN & DASHBOARD TEMPLATES ====================
+# ==================== 1. ULTIMATE LOGIN & DASHBOARD TEMPLATES ====================
 LOGIN_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraBot Login</title>
+    <title>AuraBot Ultimate Login</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 320px; border-top: 4px solid #38bdf8; }
-        h2 { color: #38bdf8; text-align: center; margin-top: 0; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #cbd5e1; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        button { background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; }
-        button:hover { background: #0369a1; }
-        .error { color: #ef4444; font-size: 13px; text-align: center; margin-bottom: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0f172a, #1e1b4b); color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: rgba(30, 41, 59, 0.9); padding: 40px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 350px; border-top: 5px solid #38bdf8; backdrop-filter: blur(10px); }
+        h2 { color: #38bdf8; text-align: center; margin-top: 0; font-weight: 800; letter-spacing: 1px; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #cbd5e1; font-weight: 600; text-transform: uppercase; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; font-size: 15px; }
+        input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+        button { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.3s; }
+        button:hover { background: linear-gradient(135deg, #0369a1, #075985); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(2, 132, 199, 0.4); }
+        .error { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #fca5a5; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; margin-bottom: 15px; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h2>🔒 Admin Login</h2>
+        <h2>⚡ AuraBot Master</h2>
         {% if error %}
             <p class="error">{{ error }}</p>
         {% endif %}
         <form method="POST" action="/login">
-            <label>Username:</label>
-            <input type="text" name="username" required>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-            <button type="submit">Login</button>
+            <label>Admin Username:</label>
+            <input type="text" name="username" placeholder="Enter username..." required>
+            <label>Admin Password:</label>
+            <input type="password" name="password" placeholder="Enter password..." required>
+            <button type="submit">Unlock Dashboard</button>
         </form>
     </div>
 </body>
@@ -76,67 +77,70 @@ DASHBOARD_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraBot Control Panel</title>
+    <title>AuraBot Ultimate Command Center</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
-        .container { max-width: 850px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        h1 { color: #38bdf8; margin: 0; }
-        .logout-btn { background: #ef4444; padding: 8px 15px; border-radius: 6px; color: white; text-decoration: none; font-weight: bold; font-size: 13px; }
-        .logout-btn:hover { background: #dc2626; }
-        .subtitle { color: #94a3b8; margin-bottom: 30px; font-size: 14px; }
-        .card { background: #334155; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #38bdf8; }
-        h3 { margin-top: 0; color: #38bdf8; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #cbd5e1; }
-        input[type="text"] { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; height: 120px; resize: vertical; }
-        button { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; transition: background 0.2s; }
-        button:hover { background: #0369a1; }
-        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; background: #22c55e; color: white; font-weight: bold; font-size: 12px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b0f19; color: #f8fafc; margin: 0; padding: 25px; }
+        .container { max-width: 900px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); border: 1px solid #1f2937; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1f2937; padding-bottom: 20px; margin-bottom: 25px; }
+        h1 { color: #38bdf8; margin: 0; font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .logout-btn { background: #ef4444; padding: 10px 20px; border-radius: 8px; color: white; text-decoration: none; font-weight: bold; font-size: 13px; transition: 0.3s; }
+        .logout-btn:hover { background: #dc2626; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .card { background: #1f2937; padding: 25px; border-radius: 12px; border-left: 5px solid #38bdf8; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        h3 { margin-top: 0; color: #38bdf8; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #cbd5e1; }
+        input[type="text"] { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #374151; background: #0b0f19; color: white; box-sizing: border-box; font-size: 14px; }
+        textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #374151; background: #0b0f19; color: white; box-sizing: border-box; height: 130px; resize: vertical; font-family: monospace; font-size: 13px; }
+        input:focus, textarea:focus { border-color: #38bdf8; outline: none; }
+        button { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; transition: 0.3s; }
+        button:hover { background: linear-gradient(135deg, #0369a1, #075985); box-shadow: 0 5px 15px rgba(2, 132, 199, 0.4); }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; background: rgba(34, 197, 94, 0.2); border: 1px solid #22c55e; color: #4ade80; font-weight: bold; font-size: 13px; }
+        .dot { height: 8px; width: 8px; background-color: #4ade80; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #4ade80; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>AuraBot Control Panel</h1>
-            <a href="/logout" class="logout-btn">Logout</a>
+            <h1>⚡ AuraBot Master Control Panel</h1>
+            <a href="/logout" class="logout-btn">Logout Securely</a>
         </div>
-        <p class="subtitle">Protected Admin Dashboard</p>
         
-        <div class="card">
-            <h3>🤖 Bot Status</h3>
-            <p>Current State: <span class="status-badge">Online & Active</span></p>
-        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>🤖 Bot Operational Status</h3>
+                <p style="margin: 0;">Live System State: <span class="status-badge"><span class="dot"></span> Online & Fully Operational</span></p>
+            </div>
 
-        <div class="card">
-            <h3>⚙️ Change Bot Activity / Playing Status</h3>
-            <form action="/update-status" method="POST">
-                <label for="status_text">Status Activity Message:</label>
-                <input type="text" id="status_text" name="status_text" placeholder="e.g. /help | High Performance Music" required>
-                <button type="submit">Update Status</button>
-            </form>
-        </div>
+            <div class="card">
+                <h3>⚙️ Live Presence & Status Changer</h3>
+                <form action="/update-status" method="POST">
+                    <label for="status_text">Custom Playing Status Message:</label>
+                    <input type="text" id="status_text" name="status_text" placeholder="e.g. /help | Forest Vibes 🍄" required>
+                    <button type="submit">Push Status to Discord</button>
+                </form>
+            </div>
 
-        <div class="card">
-            <h3>🌿 Customize Forest Welcome Message & Banner</h3>
-            <form action="/update-welcome" method="POST">
-                <label for="welcome_msg">Welcome Text / Description:</label>
-                <textarea id="welcome_msg" name="welcome_msg" required>{{ current_msg }}</textarea>
-                <label for="welcome_img">Welcome Banner Image URL:</label>
-                <input type="text" id="welcome_img" name="welcome_img" value="{{ current_img }}" required>
-                <button type="submit">Save Welcome Settings</button>
-            </form>
-        </div>
+            <div class="card">
+                <h3>🌿 Forest Welcome Message & Banner Studio</h3>
+                <form action="/update-welcome" method="POST">
+                    <label for="welcome_msg">Welcome Embed Content (Supports Markdown & <@user>):</label>
+                    <textarea id="welcome_msg" name="welcome_msg" required>{{ current_msg }}</textarea>
+                    <label for="welcome_img">Welcome Embed Banner Image URL:</label>
+                    <input type="text" id="welcome_img" name="welcome_img" value="{{ current_img }}" required>
+                    <button type="submit">Save & Apply Welcome Config</button>
+                </form>
+            </div>
 
-        <div class="card">
-            <h3>📢 Send Announcement / Broadcast</h3>
-            <form action="/broadcast" method="POST">
-                <label for="channel_id">Discord Text Channel ID:</label>
-                <input type="text" id="channel_id" name="channel_id" placeholder="Enter channel ID..." required>
-                <label for="message">Announcement Message:</label>
-                <input type="text" id="message" name="message" placeholder="Type your message here..." required>
-                <button type="submit">Send Broadcast</button>
-            </form>
+            <div class="card">
+                <h3>📢 Global Broadcast Announcement</h3>
+                <form action="/broadcast" method="POST">
+                    <label for="channel_id">Target Discord Text Channel ID:</label>
+                    <input type="text" id="channel_id" name="channel_id" placeholder="Paste Channel ID here..." required>
+                    <label for="message">Announcement Message Text:</label>
+                    <input type="text" id="message" name="message" placeholder="Type your broadcast message..." required>
+                    <button type="submit">Broadcast Instantly</button>
+                </form>
+            </div>
         </div>
     </div>
 </body>
@@ -151,7 +155,7 @@ def login():
             session['logged_in'] = True
             return redirect(url_for('home'))
         else:
-            error = "Galat Username ya Password hai!"
+            error = "⚠️ Galat Username ya Password hai! Dobara koshish karein."
     return render_template_string(LOGIN_TEMPLATE, error=error)
 
 @app.route('/logout')
@@ -389,13 +393,13 @@ async def dashboard_link(interaction: discord.Interaction):
     render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://railway.app")
     
     embed = discord.Embed(
-        title="🌐 AuraBot Control Panel",
+        title="🌐 AuraBot Master Control Panel",
         description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche diye gaye button par click karein!",
         color=discord.Color.from_rgb(46, 139, 87)
     )
     
     view = discord.ui.View()
-    view.add_item(discord.ui.Button(label="Open Dashboard", style=discord.ButtonStyle.link, url=render_url))
+    view.add_item(discord.ui.Button(label="Open Control Panel", style=discord.ButtonStyle.link, url=render_url))
     
     await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
@@ -444,4 +448,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Bot start error: {e}")
     else:
-        print("ERROR: DISCORD_TOKEN environment variable is missing!")
+        print("ERROR: DISCORD_TOKEN environment
