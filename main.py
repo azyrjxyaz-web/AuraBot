@@ -442,4 +442,6 @@ if __name__ == "__main__":
         try:
             bot.run(DISCORD_TOKEN)
         except Exception as e:
-            print(f"Bot start erro
+            print(f"Bot start error: {e}")
+    else:
+        print("ERROR: DISCORD_TOKEN environment variable is missing!")
