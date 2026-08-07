@@ -283,7 +283,7 @@ YTDL_OPTIONS = {
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
-# Database Dictionaries for Economy
+# Database Dictionaries for Economy & Cooldowns
 user_balances = {}
 daily_cooldowns = {}
 
@@ -421,9 +421,8 @@ async def vc247_toggle(interaction: discord.Interaction):
 async def daily_reward(interaction: discord.Interaction):
     uid = interaction.user.id
     current_time = time.time()
-    cooldown_period = 86400  # 24 hours in seconds (24 * 60 * 60)
+    cooldown_period = 86400  # 24 hours in seconds
 
-    # Check if user has claimed before and if 24 hours have passed
     if uid in daily_cooldowns:
         elapsed_time = current_time - daily_cooldowns[uid]
         if elapsed_time < cooldown_period:
@@ -435,7 +434,6 @@ async def daily_reward(interaction: discord.Interaction):
                 ephemeral=True
             )
 
-    # Update cooldown and add reward
     daily_cooldowns[uid] = current_time
     reward = 500
     user_balances[uid] = user_balances.get(uid, 0) + reward
@@ -449,4 +447,5 @@ async def check_balance(interaction: discord.Interaction):
     await interaction.response.send_message(f"💳 **{interaction.user.display_name}**, Aapka Balance: **{bal} Coins**.")
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
-async def dashboard_link(interactio
+async def dashboard_link(interaction: discord.Interaction):
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onre
