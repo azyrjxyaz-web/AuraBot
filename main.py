@@ -15,8 +15,8 @@ static_ffmpeg.add_paths()
 app = Flask('')
 app.secret_key = "amit_secret_key_change_this"
 
-ADMIN_USERNAME = "admin"
-ADMIN_PASSWORD = "mypassword123"
+ADMIN_USERNAME = "AuraBot"
+ADMIN_PASSWORD = "AMITRATHOD"
 
 bot_settings = {
     "welcome_message": """🍃 ━━━━━━━━━━━━━━━━━━━━━━━━━━ 🍃
