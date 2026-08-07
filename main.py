@@ -446,12 +446,10 @@ async def clear_messages(interaction: discord.Interaction, amount: int = 40):
         await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
         return
 
-    # Messages delete karna
-   deleted = await interaction.channel.purge(limit=amount)
-    
-    # Confirmation message
+    # Dhyan dein ki 'deleted' wali line bilkul 'if' ke 'i' ke theek niche seedh mein ho
+    deleted = await interaction.channel.purge(limit=amount)
     await interaction.response.send_message(f"✅ {len(deleted)} messages successfully delete kar diye gaye!", ephemeral=True)
-
+    
 # ================== 7. START BOT ==================
 if __name__ == "__main__":
     keep_alive()
