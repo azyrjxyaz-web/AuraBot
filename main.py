@@ -435,19 +435,10 @@ async def create_poll(interaction: discord.Interaction, question: str):
 async def custom_help(interaction: discord.Interaction):
     embed = discord.Embed(title="⚡ AuraBot Command Manual", color=discord.Color.from_rgb(46, 139, 87))
     embed.add_field(name="🎵 Music & VC", value="`/play`, `/join`, `/pause`, `/resume`, `/skip`, `/stop`, `/leave`, `/vc247`", inline=False)
-    embed.add_field(name="💰 Economy & Panel", value="`/daily`, `/balance`, `/dashboard`", inline=False)
+    embed.add_field(name="🔥 Economy & Panel", value="`/daily`, `/balance`, `/dashboard`", inline=False)
     embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`, `/clear`", inline=False)
     await interaction.response.send_message(embed=embed)
-
-@bot.tree.command(name="clear", description="Clear a specified number of messages")
-async def clear_messages(interaction: discord.Interaction, amount: int = 40):
-    if not interaction.user.guild_permissions.manage_messages:
-        await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
-        return
-
-    deleted = await interaction.channel.purge(limit=amount)
-    await interaction.response.send_message(f"✅ {len(deleted)} messages successfully delete kar diye gaye!", ephemeral=True)
-
+    
 @bot.tree.command(name="clear", description="Clear a specified number of messages")
 async def clear_messages(interaction: discord.Interaction, amount: int = 40):
     # Check karta hai ki user ke paas delete karne ki permission hai ya nahi
