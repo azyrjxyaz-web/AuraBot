@@ -24,9 +24,9 @@ Welcome to the Forest, <@user>! 🍄
 
 Humare cozy community garden mein aapka swaagat hai! ✨
 
-🌷 ┆ **Rules:** <#1478807408342995098>
-🌿 ┆ **Main Chat:** <#1478807408867414171>
-🌸 ┆ **Self Roles:** <#1478807408342995099>
+🌷 ┆ *Rules:* <#1478807408342995098>
+🌿 ┆ *Main Chat:* <#1478807408867414171>
+🌸 ┆ *Self Roles:* <#1478807408342995099>
 
 Chill karo, music suno aur naye dosto se milo! 🎧💖
 🍃 ━━━━━━━━━━━━━━━━━━━━━━━━🍃""",
@@ -448,4 +448,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"Bot start error: {e}")
     else:
-        print("ERROR: DISCORD_TOKEN environment
+        print("ERROR: DISCORD_TOKEN environment variable is missing!")
