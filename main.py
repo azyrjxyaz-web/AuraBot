@@ -390,7 +390,8 @@ async def check_balance(interaction: discord.Interaction):
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
 async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://railway.app")
+    # Railway ya Render ka URL automatically detect karega
+    panel_url = os.environ.get("RENDER_EXTERNAL_URL", os.environ.get("RAILWAY_STATIC_URL", "https://your-panel-link.up.railway.app"))
     
     embed = discord.Embed(
         title="🌐 AuraBot Master Control Panel",
@@ -399,7 +400,7 @@ async def dashboard_link(interaction: discord.Interaction):
     )
     
     view = discord.ui.View()
-    view.add_item(discord.ui.Button(label="Open Control Panel", style=discord.ButtonStyle.link, url=render_url))
+    view.add_item(discord.ui.Button(label="Open Control Panel", style=discord.ButtonStyle.link, url=panel_url))
     
     await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
@@ -408,7 +409,7 @@ async def dashboard_link(interaction: discord.Interaction):
 @bot.tree.command(name="ping", description="Check bot latency")
 async def ping_bot(interaction: discord.Interaction):
     await interaction.response.send_message(f"🏓 **Pong!** Latency: `{round(bot.latency * 1000)}ms`")
-    
+
 @bot.tree.command(name="avatar", description="Show user profile avatar")
 async def show_avatar(interaction: discord.Interaction, member: discord.Member = None):
     member = member or interaction.user
@@ -430,12 +431,25 @@ async def create_poll(interaction: discord.Interaction, question: str):
     await msg.add_reaction("👍")
     await msg.add_reaction("👎")
 
-@bot.tree.command(name="help", description="Wihow all available slash commands")
+@bot.tree.command(name="clear", description="Clear a specified number of messages")
+async def clear_messages(interaction: discord.Interaction, amount: int = 40):
+    if not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
+        return
+
+    try:
+        await interaction.response.defer(ephemeral=True)
+        deleted = await interaction.channel.purge(limit=amount)
+        await interaction.followup.send(f"✅ Successfully **{len(deleted)}** messages delete kar diye gaye!", ephemeral=True)
+    except Exception as e:
+        await interaction.followup.send(f"❌ Messages delete karte samay error aaya: `{e}`", ephemeral=True)
+
+@bot.tree.command(name="help", description="Show all available slash commands")
 async def custom_help(interaction: discord.Interaction):
     embed = discord.Embed(title="⚡ AuraBot Command Manual", color=discord.Color.from_rgb(46, 139, 87))
     embed.add_field(name="🎵 Music & VC", value="`/play`, `/join`, `/pause`, `/resume`, `/skip`, `/stop`, `/leave`, `/vc247`", inline=False)
     embed.add_field(name="💰 Economy & Panel", value="`/daily`, `/balance`, `/dashboard`", inline=False)
-    embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`", inline=False)
+    embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`, `/clear`", inline=False)
     await interaction.response.send_message(embed=embed)
 
 # ==================== 7. START BOT ====================
