@@ -294,7 +294,7 @@ async def on_ready():
         print(f"Synced {len(synced)} slash commands.")
     except Exception as e:
         print(f"Sync error: {e}")
-    await bot.change_presence(activity=discord.Game(name="/help | Forest Vibes 🍄"))
+    await bot.change_presence(activity=discord.Game(name="/help | Forest Vibes cb"))
 
 @bot.event
 async def on_member_join(member):
@@ -446,6 +446,6 @@ async def dashboard_link(interaction: discord.Interaction):
     
     embed = discord.Embed(
         title="🌐 AuraBot Control Panel",
-        description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche diye gaye button par click karein!",
+        description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche दिए गए button par click karein!",
         color=discord.Color.from_rgb(46, 139, 87)
     )
