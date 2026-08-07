@@ -1,7 +1,6 @@
 import os
 import asyncio
 import random
-import time
 import discord
 from discord.ext import commands
 from flask import Flask, render_template_string, request, redirect, url_for, session
@@ -16,8 +15,8 @@ static_ffmpeg.add_paths()
 app = Flask('')
 app.secret_key = "amit_secret_key_change_this"
 
-ADMIN_USERNAME = "AuraBot"
-ADMIN_PASSWORD = "AMITRATHOD"
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "mypassword123"
 
 bot_settings = {
     "welcome_message": """🍃 ━━━━━━━━━━━━━━━━━━━━━━━━━━ 🍃
@@ -34,40 +33,38 @@ Chill karo, music suno aur naye dosto se milo! 🎧💖
     "welcome_image": "https://images.unsplash.com/photo-1511497584788-876761102341?q=80&w=1000&auto=format&fit=crop"
 }
 
-# ==================== 1. POWERFUL ADVANCED LOGIN & DASHBOARD ====================
+# ==================== 1. LOGIN & DASHBOARD TEMPLATES ====================
 LOGIN_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraBot Ultimate Login</title>
+    <title>AuraBot Login</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #0b0f19; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: #111827; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.7); width: 350px; border-top: 5px solid #38bdf8; border: 1px solid #1f2937; }
-        h2 { color: #38bdf8; text-align: center; margin-top: 0; font-size: 24px; }
-        label { display: block; margin-bottom: 8px; font-size: 13px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 12px; margin-bottom: 18px; border-radius: 8px; border: 1px solid #374151; background: #0b0f19; color: white; box-sizing: border-box; font-size: 15px; }
-        button { background: #0ea5e9; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; transition: 0.2s; }
-        button:hover { background: #0284c7; }
-        .error { background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 6px; font-size: 13px; text-align: center; margin-bottom: 15px; }
-        .hint { text-align: center; color: #64748b; font-size: 12px; margin-top: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #0f172a; color: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 320px; border-top: 4px solid #38bdf8; }
+        h2 { color: #38bdf8; text-align: center; margin-top: 0; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #cbd5e1; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
+        button { background: #0284c7; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; }
+        button:hover { background: #0369a1; }
+        .error { color: #ef4444; font-size: 13px; text-align: center; margin-bottom: 10px; }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h2>🔒 AuraBot Secure</h2>
+        <h2>🔒 Admin Login</h2>
         {% if error %}
-            <div class="error">{{ error }}</div>
+            <p class="error">{{ error }}</p>
         {% endif %}
         <form method="POST" action="/login">
             <label>Username:</label>
-            <input type="text" name="username" placeholder="Enter AuraBot" required>
+            <input type="text" name="username" required>
             <label>Password:</label>
-            <input type="password" name="password" placeholder="Enter Password" required>
-            <button type="submit">Access Control Panel</button>
+            <input type="password" name="password" required>
+            <button type="submit">Login</button>
         </form>
-        <p class="hint">Default: AuraBot / AMITRATHOD</p>
     </div>
 </body>
 </html>
@@ -79,81 +76,66 @@ DASHBOARD_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraBot Ultimate Control Panel</title>
+    <title>AuraBot Control Panel</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #f8fafc; margin: 0; padding: 30px; }
-        .container { max-width: 950px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 16px; box-shadow: 0 20px 45px rgba(0,0,0,0.8); border: 1px solid #1f2937; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f2937; padding-bottom: 20px; margin-bottom: 25px; }
-        h1 { color: #38bdf8; margin: 0; font-size: 26px; }
-        .logout-btn { background: #ef4444; padding: 10px 20px; border-radius: 8px; color: white; text-decoration: none; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 850px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        h1 { color: #38bdf8; margin: 0; }
+        .logout-btn { background: #ef4444; padding: 8px 15px; border-radius: 6px; color: white; text-decoration: none; font-weight: bold; font-size: 13px; }
         .logout-btn:hover { background: #dc2626; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .card { background: #1f2937; padding: 22px; border-radius: 12px; border-left: 5px solid #38bdf8; border: 1px solid #374151; }
-        .card.full { grid-column: span 2; }
-        h3 { margin-top: 0; color: #38bdf8; font-size: 18px; margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13px; color: #94a3b8; text-transform: uppercase; }
-        input[type="text"], textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #374151; background: #0b0f19; color: white; box-sizing: border-box; font-size: 14px; }
-        textarea { height: 140px; resize: vertical; font-family: monospace; }
-        button { background: #0ea5e9; color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; transition: 0.2s; }
-        button:hover { background: #0284c7; }
-        .danger-btn { background: #ef4444 !important; }
-        .danger-btn:hover { background: #dc2626 !important; }
-        .status-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; background: #22c55e; color: white; font-weight: bold; font-size: 12px; }
-        .info-text { color: #cbd5e1; font-size: 14px; margin: 5px 0; }
+        .subtitle { color: #94a3b8; margin-bottom: 30px; font-size: 14px; }
+        .card { background: #334155; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #38bdf8; }
+        h3 { margin-top: 0; color: #38bdf8; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #cbd5e1; }
+        input[type="text"] { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
+        textarea { width: 100%; padding: 10px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; height: 120px; resize: vertical; }
+        button { background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 15px; transition: background 0.2s; }
+        button:hover { background: #0369a1; }
+        .status-badge { display: inline-block; padding: 6px 12px; border-radius: 20px; background: #22c55e; color: white; font-weight: bold; font-size: 12px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>⚡ AuraBot Ultimate Command Center</h1>
+            <h1>AuraBot Control Panel</h1>
             <a href="/logout" class="logout-btn">Logout</a>
         </div>
+        <p class="subtitle">Protected Admin Dashboard</p>
         
-        <div class="grid">
-            <div class="card">
-                <h3>🤖 Bot Live Status</h3>
-                <p class="info-text">State: <span class="status-badge">Online & Active 24/7</span></p>
-                <p class="info-text">Latency: <b>{{ bot_latency }}ms</b></p>
-                <p class="info-text">Active Voice Channels: <b>{{ active_vc_count }}</b></p>
-            </div>
-
-            <div class="card">
-                <h3>🔊 Voice Management</h3>
-                <p class="info-text">Connected VC: <b>{{ current_vc_name }}</b></p>
-                <form action="/disconnect-vc" method="POST" style="margin-top: 15px;">
-                    <button type="submit" class="danger-btn">Force Disconnect Bot from VC</button>
-                </form>
-            </div>
+        <div class="card">
+            <h3>🤖 Bot Status</h3>
+            <p>Current State: <span class="status-badge">Online & Active</span></p>
         </div>
 
-        <div class="card full">
+        <div class="card">
             <h3>⚙️ Change Bot Activity / Playing Status</h3>
             <form action="/update-status" method="POST">
-                <label>Status Message (Activity):</label>
-                <input type="text" name="status_text" placeholder="e.g. /help | Forest Vibes 🍄" required>
-                <button type="submit">Update Bot Status</button>
+                <label for="status_text">Status Activity Message:</label>
+                <input type="text" id="status_text" name="status_text" placeholder="e.g. /help | High Performance Music" required>
+                <button type="submit">Update Status</button>
             </form>
         </div>
 
-        <div class="card full">
+        <div class="card">
             <h3>🌿 Customize Forest Welcome Message & Banner</h3>
             <form action="/update-welcome" method="POST">
-                <label>Welcome Text / Embed Description:</label>
-                <textarea name="welcome_msg" required>{{ current_msg }}</textarea>
-                <label>Welcome Banner Image URL:</label>
-                <input type="text" name="welcome_img" value="{{ current_img }}" required>
+                <label for="welcome_msg">Welcome Text / Description:</label>
+                <textarea id="welcome_msg" name="welcome_msg" required>{{ current_msg }}</textarea>
+                <label for="welcome_img">Welcome Banner Image URL:</label>
+                <input type="text" id="welcome_img" name="welcome_img" value="{{ current_img }}" required>
                 <button type="submit">Save Welcome Settings</button>
             </form>
         </div>
 
-        <div class="card full">
-            <h3>📢 Send Global Announcement / Broadcast</h3>
+        <div class="card">
+            <h3>📢 Send Announcement / Broadcast</h3>
             <form action="/broadcast" method="POST">
-                <label>Discord Text Channel ID:</label>
-                <input type="text" name="channel_id" placeholder="Enter target channel ID..." required>
-                <label>Announcement Message:</label>
-                <input type="text" name="message" placeholder="Type your high-priority announcement here..." required>
-                <button type="submit">Send Broadcast Message</button>
+                <label for="channel_id">Discord Text Channel ID:</label>
+                <input type="text" id="channel_id" name="channel_id" placeholder="Enter channel ID..." required>
+                <label for="message">Announcement Message:</label>
+                <input type="text" id="message" name="message" placeholder="Type your message here..." required>
+                <button type="submit">Send Broadcast</button>
             </form>
         </div>
     </div>
@@ -181,19 +163,7 @@ def logout():
 def home():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    
-    latency = round(bot.latency * 1000) if bot.latency else 0
-    vc_count = len(bot.voice_clients)
-    vc_name = bot.voice_clients[0].channel.name if vc_count > 0 and bot.voice_clients[0].channel else "None"
-
-    return render_template_string(
-        DASHBOARD_TEMPLATE, 
-        current_msg=bot_settings["welcome_message"], 
-        current_img=bot_settings["welcome_image"],
-        bot_latency=latency,
-        active_vc_count=vc_count,
-        current_vc_name=vc_name
-    )
+    return render_template_string(DASHBOARD_TEMPLATE, current_msg=bot_settings["welcome_message"], current_img=bot_settings["welcome_image"])
 
 @app.route('/update-status', methods=['POST'])
 def update_status():
@@ -230,26 +200,10 @@ def broadcast():
             pass
     return redirect(url_for('home'))
 
-@app.route('/disconnect-vc', methods=['POST'])
-def disconnect_vc():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    async def leave_all_vc():
-        for vc in bot.voice_clients:
-            await vc.disconnect()
-    asyncio.run_coroutine_threadsafe(leave_all_vc(), bot.loop)
-    return redirect(url_for('home'))
-
 async def send_discord_message(channel_id, message):
     channel = bot.get_channel(channel_id)
     if channel:
-        embed = discord.Embed(
-            title="📢 Forest Official Announcement",
-            description=message,
-            color=discord.Color.from_rgb(46, 139, 87)
-        )
-        embed.set_footer(text="Sent via AuraBot Secure Control Panel")
-        await channel.send(embed=embed)
+        await channel.send(f"📢 **Announcement:** {message}")
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
@@ -282,10 +236,7 @@ YTDL_OPTIONS = {
 }
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
-
-# Database Dictionaries for Economy & Cooldowns
 user_balances = {}
-daily_cooldowns = {}
 
 @bot.event
 async def on_ready():
@@ -417,28 +368,12 @@ async def vc247_toggle(interaction: discord.Interaction):
 
 # ==================== 5. SLASH COMMANDS (ECONOMY & DASHBOARD) ====================
 
-@bot.tree.command(name="daily", description="Claim your daily 24-hour coin reward")
+@bot.tree.command(name="daily", description="Claim your daily coin reward")
 async def daily_reward(interaction: discord.Interaction):
     uid = interaction.user.id
-    current_time = time.time()
-    cooldown_period = 86400  # 24 hours in seconds
-
-    if uid in daily_cooldowns:
-        elapsed_time = current_time - daily_cooldowns[uid]
-        if elapsed_time < cooldown_period:
-            remaining_time = cooldown_period - elapsed_time
-            hours = int(remaining_time // 3600)
-            minutes = int((remaining_time % 3600) // 60)
-            return await interaction.response.send_message(
-                f"⏳ Aapne aaj ka daily reward pehle hi claim kar liya hai! Agla reward aap **{hours} ghante aur {minutes} minat** baad claim kar payenge.", 
-                ephemeral=True
-            )
-
-    daily_cooldowns[uid] = current_time
     reward = 500
     user_balances[uid] = user_balances.get(uid, 0) + reward
-    
-    await interaction.response.send_message(f"💰 **+{reward} Coins added!** Aapka naya balance: **{user_balances[uid]} Coins**.")
+    await interaction.response.send_message(f"💰 **+{reward} Coins!** Aapka naya balance: **{user_balances[uid]} Coins**.")
 
 @bot.tree.command(name="balance", description="Check your coin balance")
 async def check_balance(interaction: discord.Interaction):
@@ -448,4 +383,59 @@ async def check_balance(interaction: discord.Interaction):
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
 async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onre
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://render.com")
+    
+    embed = discord.Embed(
+        title="🌐 AuraBot Control Panel",
+        description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche diye gaye button par click karein!",
+        color=discord.Color.from_rgb(46, 139, 87)
+    )
+    
+    view = discord.ui.View()
+    view.add_item(discord.ui.Button(label="Open Dashboard", style=discord.ButtonStyle.link, url=render_url))
+    
+    await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
+
+# ==================== 6. SLASH COMMANDS (UTILITY & FUN) ====================
+
+@bot.tree.command(name="ping", description="Check bot latency")
+async def ping_bot(interaction: discord.Interaction):
+    await interaction.response.send_message(f"🏓 **Pong!** Latency: `{round(bot.latency * 1000)}ms`")
+
+@bot.tree.command(name="avatar", description="Show user profile avatar")
+async def show_avatar(interaction: discord.Interaction, member: discord.Member = None):
+    member = member or interaction.user
+    embed = discord.Embed(title=f"{member.display_name}'s Avatar", color=discord.Color.from_rgb(46, 139, 87))
+    embed.set_image(url=member.display_avatar.url)
+    await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="toss", description="Flip a coin")
+async def coin_toss(interaction: discord.Interaction):
+    res = random.choice(["Heads 🪙", "Tails 🪙"])
+    await interaction.response.send_message(f"🎲 Result: **{res}**")
+
+@bot.tree.command(name="poll", description="Create a community poll")
+async def create_poll(interaction: discord.Interaction, question: str):
+    embed = discord.Embed(title="📊 Forest Community Poll", description=question, color=discord.Color.from_rgb(46, 139, 87))
+    embed.set_footer(text=f"Asked by {interaction.user.display_name}")
+    await interaction.response.send_message(embed=embed)
+    msg = await interaction.original_response()
+    await msg.add_reaction("👍")
+    await msg.add_reaction("👎")
+
+@bot.tree.command(name="help", description="Show all available slash commands")
+async def custom_help(interaction: discord.Interaction):
+    embed = discord.Embed(title="⚡ AuraBot Command Manual", color=discord.Color.from_rgb(46, 139, 87))
+    embed.add_field(name="🎵 Music & VC", value="`/play`, `/join`, `/pause`, `/resume`, `/skip`, `/stop`, `/leave`, `/vc247`", inline=False)
+    embed.add_field(name="💰 Economy & Panel", value="`/daily`, `/balance`, `/dashboard`", inline=False)
+    embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`", inline=False)
+    await interaction.response.send_message(embed=embed)
+
+# ==================== 7. START BOT ====================
+if __name__ == "__main__":
+    keep_alive()
+    DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Gimde5.Sd0kyos2HVqYGRk63nJw0rnnSjYDbdQP5ttCY"
+    if DISCORD_TOKEN:
+        bot.run(DISCORD_TOKEN)
+    else:
+        print("ERROR: Discord token is missing!")
