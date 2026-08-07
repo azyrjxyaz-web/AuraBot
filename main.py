@@ -1,6 +1,7 @@
 import os
 import asyncio
 import random
+import time
 import discord
 from discord.ext import commands
 from flask import Flask, render_template_string, request, redirect, url_for, session
@@ -281,7 +282,10 @@ YTDL_OPTIONS = {
 }
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
+
+# Database Dictionaries for Economy
 user_balances = {}
+daily_cooldowns = {}
 
 @bot.event
 async def on_ready():
@@ -413,12 +417,30 @@ async def vc247_toggle(interaction: discord.Interaction):
 
 # ==================== 5. SLASH COMMANDS (ECONOMY & DASHBOARD) ====================
 
-@bot.tree.command(name="daily", description="Claim your daily coin reward")
+@bot.tree.command(name="daily", description="Claim your daily 24-hour coin reward")
 async def daily_reward(interaction: discord.Interaction):
     uid = interaction.user.id
+    current_time = time.time()
+    cooldown_period = 86400  # 24 hours in seconds (24 * 60 * 60)
+
+    # Check if user has claimed before and if 24 hours have passed
+    if uid in daily_cooldowns:
+        elapsed_time = current_time - daily_cooldowns[uid]
+        if elapsed_time < cooldown_period:
+            remaining_time = cooldown_period - elapsed_time
+            hours = int(remaining_time // 3600)
+            minutes = int((remaining_time % 3600) // 60)
+            return await interaction.response.send_message(
+                f"⏳ Aapne aaj ka daily reward pehle hi claim kar liya hai! Agla reward aap **{hours} ghante aur {minutes} minat** baad claim kar payenge.", 
+                ephemeral=True
+            )
+
+    # Update cooldown and add reward
+    daily_cooldowns[uid] = current_time
     reward = 500
     user_balances[uid] = user_balances.get(uid, 0) + reward
-    await interaction.response.send_message(f"💰 **+{reward} Coins!** Aapka naya balance: **{user_balances[uid]} Coins**.")
+    
+    await interaction.response.send_message(f"💰 **+{reward} Coins added!** Aapka naya balance: **{user_balances[uid]} Coins**.")
 
 @bot.tree.command(name="balance", description="Check your coin balance")
 async def check_balance(interaction: discord.Interaction):
@@ -427,22 +449,4 @@ async def check_balance(interaction: discord.Interaction):
     await interaction.response.send_message(f"💳 **{interaction.user.display_name}**, Aapka Balance: **{bal} Coins**.")
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
-async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onrender.com")
-    
-    embed = discord.Embed(
-        title="🌐 AuraBot Control Panel",
-        description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche diye gaye button par click karein!",
-        color=discord.Color.from_rgb(46, 139, 87)
-    )
-    
-    view = discord.ui.View()
-    view.add_item(discord.ui.Button(label="Open Dashboard", style=discord.ButtonStyle.link, url=render_url))
-    
-    await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
-
-# ==================== 6. SLASH COMMANDS (UTILITY & FUN) ====================
-
-@bot.tree.command(name="ping", description="Check bot latency")
-async def ping_bot(interaction: discord.Interaction):
-    await interaction.response.send_message(f"🏓 **Pong!** L
+async def dashboard_link(interactio
