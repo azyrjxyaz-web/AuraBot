@@ -441,6 +441,15 @@ async def custom_help(interaction: discord.Interaction):
 
 @bot.tree.command(name="clear", description="Clear a specified number of messages")
 async def clear_messages(interaction: discord.Interaction, amount: int = 40):
+    if not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
+        return
+
+    deleted = await interaction.channel.purge(limit=amount)
+    await interaction.response.send_message(f"✅ {len(deleted)} messages successfully delete kar diye gaye!", ephemeral=True)
+
+@bot.tree.command(name="clear", description="Clear a specified number of messages")
+async def clear_messages(interaction: discord.Interaction, amount: int = 40):
     # Check karta hai ki user ke paas delete karne ki permission hai ya nahi
     if not interaction.user.guild_permissions.manage_messages:
         await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
