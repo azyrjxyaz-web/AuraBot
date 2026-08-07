@@ -439,6 +439,19 @@ async def custom_help(interaction: discord.Interaction):
     embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`", inline=False)
     await interaction.response.send_message(embed=embed)
 
+@bot.tree.command(name="clear", description="Clear a specified number of messages")
+async def clear_messages(interaction: discord.Interaction, amount: int = 40):
+    # Check karta hai ki user ke paas delete karne ki permission hai ya nahi
+    if not interaction.user.guild_permissions.manage_messages:
+        await interaction.response.send_message("❌ Aapke paas messages delete karne ki permission nahi hai!", ephemeral=True)
+        return
+
+    # Messages delete karna
+    deleted = await interaction.channel.purge(limit=amount)
+
+Confirmation message
+    await interaction.response.send_message(f"✅ {len(deleted)} messages successfully delete kar diye gaye!", ephemeral=True)
+
 # ==================== 7. START BOT ====================
 if __name__ == "__main__":
     keep_alive()
@@ -450,3 +463,4 @@ if __name__ == "__main__":
             print(f"Bot start error: {e}")
     else:
         print("ERROR: DISCORD_TOKEN environment variable is missing!")
+        
