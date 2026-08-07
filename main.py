@@ -390,7 +390,7 @@ async def check_balance(interaction: discord.Interaction):
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
 async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://railway.app")
+    render_url = "https://web-production-7df4a.up.railway.app/login"
     
     embed = discord.Embed(
         title="🌐 AuraBot Master Control Panel",
