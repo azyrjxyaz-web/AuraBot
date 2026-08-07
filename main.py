@@ -446,4 +446,4 @@ async def daily_reward(interaction: discord.Interaction):
             remaining_time = cooldown_period - elapsed_time
             hours = int(remaining_time // 3600)
             minutes = int((remaining_time % 3600) // 60)
-            return await interaction.response.send_message(f"⏳ Aapne aaj ka daily reward pehle hi claim kar liya hai! Agla rewa
+            return await interaction.response.send_message("⏳ Aapne aaj ka daily reward pehle hi claim kar liya hai!", ephemera
