@@ -447,12 +447,12 @@ async def clear_messages(interaction: discord.Interaction, amount: int = 40):
         return
 
     # Messages delete karna
-    deleted = await interaction.channel.purge(limit=amount)
-
-Confirmation message
+   deleted = await interaction.channel.purge(limit=amount)
+    
+    # Confirmation message
     await interaction.response.send_message(f"✅ {len(deleted)} messages successfully delete kar diye gaye!", ephemeral=True)
 
-# ==================== 7. START BOT ====================
+# ================== 7. START BOT ==================
 if __name__ == "__main__":
     keep_alive()
     DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
