@@ -283,7 +283,6 @@ YTDL_OPTIONS = {
 
 ytdl = yt_dlp.YoutubeDL(YTDL_OPTIONS)
 
-# Database Dictionaries for Economy & Cooldowns
 user_balances = {}
 daily_cooldowns = {}
 
@@ -297,7 +296,6 @@ async def on_ready():
         print(f"Sync error: {e}")
     await bot.change_presence(activity=discord.Game(name="/help | Forest Vibes 🍄"))
 
-# ==================== 3. FOREST WELCOME EVENT ====================
 @bot.event
 async def on_member_join(member):
     WELCOME_CHANNEL_ID = 1478807408342995096
@@ -322,8 +320,6 @@ async def on_member_join(member):
         embed.set_footer(text=f"Total Members: {member.guild.member_count}")
         
         await target_channel.send(embed=embed)
-
-# ==================== 4. SLASH COMMANDS (MUSIC & VC) ====================
 
 @bot.tree.command(name="join", description="Join your current voice channel")
 async def join_vc(interaction: discord.Interaction):
@@ -415,13 +411,11 @@ async def vc247_toggle(interaction: discord.Interaction):
         await interaction.user.voice.channel.connect(reconnect=True, timeout=30.0)
     await interaction.response.send_message("🔒 **24/7 VC Lock Activated!** Bot channel nahi chhodega.")
 
-# ==================== 5. SLASH COMMANDS (ECONOMY & DASHBOARD) ====================
-
 @bot.tree.command(name="daily", description="Claim your daily 24-hour coin reward")
 async def daily_reward(interaction: discord.Interaction):
     uid = interaction.user.id
     current_time = time.time()
-    cooldown_period = 86400  # 24 hours in seconds
+    cooldown_period = 86400
 
     if uid in daily_cooldowns:
         elapsed_time = current_time - daily_cooldowns[uid]
@@ -448,4 +442,10 @@ async def check_balance(interaction: discord.Interaction):
 
 @bot.tree.command(name="dashboard", description="Get the web control panel link")
 async def dashboard_link(interaction: discord.Interaction):
-    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onre
+    render_url = os.environ.get("RENDER_EXTERNAL_URL", "https://apka-bot-naam.onrender.com")
+    
+    embed = discord.Embed(
+        title="🌐 AuraBot Control Panel",
+        description="Aapke bot ko manage karne, forest welcome message badalne aur status update karne ke liye niche diye gaye button par click karein!",
+        color=discord.Color.from_rgb(46, 139, 87)
+    )
