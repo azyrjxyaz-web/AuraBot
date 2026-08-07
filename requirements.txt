@@ -1,5 +1,6 @@
 discord.py[voice]
 Flask
-PyNaCl
 yt-dlp
 static-ffmpeg
+gTTS
+gunicorn
