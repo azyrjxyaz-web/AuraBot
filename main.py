@@ -19,7 +19,7 @@ app.secret_key = "amit_secret_key_change_this"
 ADMIN_USERNAME = "AuraBot"
 ADMIN_PASSWORD = "AMITRATHOD"
 
-# Direct Discord Token (Fixed to avoid Render environment issues)
+# Direct Discord Token
 DISCORD_TOKEN = "MTUzNDg4NzQzNjEzNDUxODg5Gimde5.Sd0kyos2HVqYGRk63nJw0rnnSjYDbdQP5ttCY"
 
 bot_settings = {
@@ -447,4 +447,4 @@ async def daily_reward(interaction: discord.Interaction):
             hours = int(remaining_time // 3600)
             minutes = int((remaining_time % 3600) // 60)
             return await interaction.response.send_message(
-                f"⏳ Aapn
+                f"⏳ Aapne aaj ka daily reward pehle hi claim kar li
