@@ -436,7 +436,7 @@ async def custom_help(interaction: discord.Interaction):
     embed = discord.Embed(title="⚡ AuraBot Command Manual", color=discord.Color.from_rgb(46, 139, 87))
     embed.add_field(name="🎵 Music & VC", value="`/play`, `/join`, `/pause`, `/resume`, `/skip`, `/stop`, `/leave`, `/vc247`", inline=False)
     embed.add_field(name="💰 Economy & Panel", value="`/daily`, `/balance`, `/dashboard`", inline=False)
-   embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`, `/clear`", inline=False)
+    embed.add_field(name="⚙️ Utility & Fun", value="`/ping`, `/avatar`, `/toss`, `/poll`, `/clear`", inline=False)
     await interaction.response.send_message(embed=embed)
 
 @bot.tree.command(name="clear", description="Clear a specified number of messages")
